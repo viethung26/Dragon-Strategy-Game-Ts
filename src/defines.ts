@@ -3,6 +3,12 @@ const DEVICE = {
     height: 768
 }
 
+const CHAMPION = {
+    width: 50,
+    height: 50
+}
+
 export {
-    DEVICE
+    DEVICE,
+    CHAMPION
 }

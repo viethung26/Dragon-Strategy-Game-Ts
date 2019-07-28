@@ -1,4 +1,4 @@
-import GameObject from './GameObject'
+import GameObject from 'framework/GameObject'
 export default class House extends GameObject {
     isOpen: boolean
     index = 0
@@ -19,12 +19,6 @@ export default class House extends GameObject {
         const height = 100
         c2d.fillStyle = "#f00"
         c2d.fillRect(this.x-width/2, this.y-height/2, width, height)
-    }
-
-    isIntesect(x: number, y: number) {
-        if (this.x - this.w/2 <= x && this.x + this.w/2 >= x && this.y - this.h/2 <= y && this.y + this.h/2 >= y )
-            return true
-        return false
     }
 
     handleClick() {
