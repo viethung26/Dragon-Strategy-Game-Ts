@@ -1,0 +1,27 @@
+[
+        {
+                "head": "Dead",
+                "length": 17
+        },
+        {
+                "head": "Idle",
+                "length": 16
+        },
+        {
+                "head": "Jump",
+                "length": 16
+        },
+        {
+                "head": "Run",
+                "length": 11
+        },
+        {
+                "head": "Slide",
+                "length": 11
+        },
+        {
+                "head": "Walk",
+                "length": 13,
+                "framesTime": [0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5]
+        }
+]

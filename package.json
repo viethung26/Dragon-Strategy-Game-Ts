@@ -25,6 +25,8 @@
     "@babel/preset-es2016": "^7.0.0-beta.53",
     "@babel/preset-typescript": "^7.3.3",
     "babel-loader": "^8.0.6",
+    "file-loader": "^4.1.0",
+    "http-proxy-middleware": "^0.19.1",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",
     "webpack": "^4.37.0",

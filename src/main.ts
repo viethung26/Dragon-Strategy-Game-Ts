@@ -3,7 +3,8 @@ import GameObject from 'framework/GameObject'
 import { DEVICE } from './defines'
 import CanvasDragTs from 'framework/CanvasDragTs';
 import Champ from 'entities/Champ';
-import Blastic from 'units/Blastic';
+import Santa from 'units/Santa';
+import Map from 'entities/Map';
 class Game {
 
     root: HTMLElement = null
@@ -11,6 +12,7 @@ class Game {
     champManager: Champ[] = []
     houseManager: House[] = []
     dragObject: { object: GameObject, dx: number, dy: number } = {object: null, dx: 0, dy: 0}
+    map: Map = null
 
     constructor(id: string) {
         this.root = document.getElementById(id)
@@ -20,14 +22,22 @@ class Game {
 
     init() {
         if(this.root) this.initGameScreen()
-        this.initHouse()
+        // this.initHouse()
         this.initChamp()
+        // this.map = new Map()
+    }
+
+    update() {
+        this.champManager.forEach(c => c.update())
     }
 
     render() {
+        this.update()
         this.c.fillStyle = '#fff'
         this.c.fillRect(0,0, DEVICE.width, DEVICE.height)
-        this.houseManager.forEach(obj => obj.render(this.c))
+        // this.map.render(this.c)
+
+        // this.houseManager.forEach(obj => obj.render(this.c))
         this.champManager.forEach(obj => obj.render(this.c))
         requestAnimationFrame(this.render.bind(this))
     }
@@ -57,8 +67,10 @@ class Game {
     }
 
     initChamp() {
-        const blastic = new Blastic(100, 100, 1)
-        this.champManager.push(blastic)
+        const santa = new Santa(100, 100, 1)
+        // const Santa2 = new Santa(100, 300, 1)
+        this.champManager.push(santa)
+        // this.champManager.push(Santa2)
     }
 
     handleClickOnScreen = e => {

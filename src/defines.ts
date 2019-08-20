@@ -8,7 +8,13 @@ const CHAMPION = {
     height: 50
 }
 
+const FRAME = {
+    fps: 100
+}
+
 export {
     DEVICE,
-    CHAMPION
+    CHAMPION,
+    FRAME
+
 }
