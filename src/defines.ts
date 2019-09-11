@@ -5,11 +5,12 @@ const DEVICE = {
 
 const CHAMPION = {
     width: 50,
-    height: 50
+    height: 50,
+    max_speed: 5,
 }
 
 const FRAME = {
-    fps: 100
+    fps: 120
 }
 
 export {

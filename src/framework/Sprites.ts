@@ -1,5 +1,13 @@
 // import santa from 'assets/characters/santa/data.json'
 const AllSprite = {}
+export interface IHeadSprite {
+    sprites: [],
+    framesTime: []
+}
+// {name: {
+//     status1: {sprites, framesTimes}
+//     status2: {sprites, framesTimes}
+// }}
 const initSprite = async (name: string) => {
     AllSprite[name] = {}
     console.log(9779, 'init sprite', name)

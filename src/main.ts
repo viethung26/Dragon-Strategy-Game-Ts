@@ -1,18 +1,22 @@
 import House from 'entities/House'
 import GameObject from 'framework/GameObject'
-import { DEVICE } from './defines'
+import { DEVICE, FRAME } from './defines'
 import CanvasDragTs from 'framework/CanvasDragTs';
 import Champ from 'entities/Champ';
 import Santa from 'units/Santa';
 import Map from 'entities/Map';
-class Game {
 
+const TPF = Math.floor(1000/FRAME.fps)
+
+class Game {
+    startTime: number = 0
     root: HTMLElement = null
     c: CanvasRenderingContext2D = null
     champManager: Champ[] = []
     houseManager: House[] = []
     dragObject: { object: GameObject, dx: number, dy: number } = {object: null, dx: 0, dy: 0}
     map: Map = null
+
 
     constructor(id: string) {
         this.root = document.getElementById(id)
@@ -22,9 +26,7 @@ class Game {
 
     init() {
         if(this.root) this.initGameScreen()
-        // this.initHouse()
         this.initChamp()
-        // this.map = new Map()
     }
 
     update() {
@@ -32,20 +34,26 @@ class Game {
     }
 
     render() {
-        this.update()
-        this.c.fillStyle = '#fff'
-        this.c.fillRect(0,0, DEVICE.width, DEVICE.height)
+        requestAnimationFrame(this.render.bind(this))
+        const now = Date.now()
+        if(now >= TPF + this.startTime) {
+            this.startTime = now
+            this.update()
+            this.c.fillStyle = '#fff'
+            this.c.fillRect(0,0, DEVICE.width, DEVICE.height)
+            this.champManager.forEach(obj => obj.render(this.c))
+        }
         // this.map.render(this.c)
 
         // this.houseManager.forEach(obj => obj.render(this.c))
-        this.champManager.forEach(obj => obj.render(this.c))
-        requestAnimationFrame(this.render.bind(this))
+    
     }
 
     // handling methods
 
     initGameScreen() {
         const canvas = document.createElement('canvas')
+       
         Object.assign(canvas, {
             id: 'gamescreen',
             width: DEVICE.width,

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        canvas {
+         border: 1px solid red;
+         /* width: 100%; */
+        }
+        body {
+            font-family: sans-serif;
+        }
+
+    </style>
+</head>
+<body>
+    <canvas id='canvas'/>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const fps = 120;
+        const fpsInterval = Math.floor(1000 / fps);
+        let x = 0;
+        let c = null;
+        let startTime = 0;
+        if (canvas) c = canvas.getContext("2d");
+        function draw() {
+            requestAnimationFrame(draw);
+            const now = new Date().getTime();
+                if (c && now >= startTime + fpsInterval) {
+                    startTime = now;
+                    c.fillStyle = "white";
+                    c.fillRect(0, 0, 500, 500);
+                    c.fillStyle = "blue";
+                    // c.fillRect(x, 0, 10, 10);
+                    c.beginPath();
+                    c.moveTo(0, 35);
+                    c.lineTo(300, 35);
+                    c.stroke();
+
+                    c.beginPath();
+                    c.arc(x, 25, 10, 0, 2 * Math.PI);
+                    c.fill();
+                    c.fillStyle = "blue";
+                    c.beginPath();
+                    c.moveTo(x, 25);
+                    c.lineTo(x + 10* Math.cos(x/150*Math.PI) , 25 + 10* Math.sin(x/150*Math.PI));
+                    c.stroke();
+
+                    x = x + 1;
+                    if (x > 300) x = 0;
+                }
+        }
+        // setInterval(draw, 20);
+        draw();
+        
+    </script>
+    
+</body>
+</html>
