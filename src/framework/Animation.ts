@@ -1,4 +1,4 @@
-import { FRAME } from 'src/defines';
+import { FRAME, CHILD_CANVAS } from 'src/defines';
 
 export default class Animation {
     name: string 
@@ -33,7 +33,7 @@ export default class Animation {
     }
 
     nextFrame() {
-        console.log(9779, 'next')
+        // console.log(9779, 'next')
         this.currentFrame++
         if (this.currentFrame >= this.frames.length) this.currentFrame = 0
         if (this.ignoreFrames[this.currentFrame]) this.nextFrame()
@@ -51,10 +51,21 @@ export default class Animation {
         }
     }
 
-    render(c2d: CanvasRenderingContext2D, x: number = 0, y: number = 0) {
+    render(c2d: CanvasRenderingContext2D, x: number = 0, y: number = 0, flip: boolean = false) {
         this.update()
+        const newCanvas = document.createElement('canvas')
+        newCanvas.width = CHILD_CANVAS.width
+        newCanvas.height = CHILD_CANVAS.height
+        const c = newCanvas.getContext('2d')
+        c.fillStyle = 'red'
+        c.strokeRect(0, 0, newCanvas.width, newCanvas.height)
+        if (flip) {
+            c.translate(CHILD_CANVAS.width, 0);
+            c.scale(-1, 1);
+        }
         if (this.type === 'ImageData') {
-            c2d.putImageData(this.frames[this.currentFrame], x, y)
-        } else c2d.drawImage(this.frames[this.currentFrame], x, y, 145, 100)
+            c.putImageData(this.frames[this.currentFrame], 0, 0)
+        } else c.drawImage(this.frames[this.currentFrame], 0, 0, CHILD_CANVAS.subW, CHILD_CANVAS.subH, 0, 0, CHILD_CANVAS.width, CHILD_CANVAS.height)
+        c2d.drawImage(newCanvas,x,y)
     }
 }

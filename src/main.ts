@@ -5,36 +5,76 @@ import CanvasDragTs from 'framework/CanvasDragTs';
 import Champ from 'entities/Champ';
 import Santa from 'units/Santa';
 import Map from 'entities/Map';
-
+import { getSprite } from 'framework/Sprites';
+//time per frame
 const TPF = Math.floor(1000/FRAME.fps)
+const keyDefines = {
+    ' ': ['jump'],
+    'z': ['slide'],
+    'ArrowRight': ['run', null],
+    'ArrowLeft': ['run', null, true]
+}
+
+
+class ChampManager<Item> extends Array {
+    call = (fn:string, ...args:any[]) => {
+        this.forEach((obj:Item) => obj[fn](...args))
+    }
+}
 
 class Game {
+    initialing = false
     startTime: number = 0
     root: HTMLElement = null
     c: CanvasRenderingContext2D = null
-    champManager: Champ[] = []
+    champManager: ChampManager<Champ> = new ChampManager
     houseManager: House[] = []
     dragObject: { object: GameObject, dx: number, dy: number } = {object: null, dx: 0, dy: 0}
     map: Map = null
-
+    pressingkeys = new Set()
+    removeKeys = new Set()
 
     constructor(id: string) {
         this.root = document.getElementById(id)
-        this.init()
-        this.render()
+        ;(async() => {
+            await this.init()
+            this.render()
+        })()
     }
 
-    init() {
+    async init() {
+        this.initialing = true
+        await this.initData()
         if(this.root) this.initGameScreen()
-        this.initChamp()
+        //key
+        document.body.addEventListener('keyup', (e) => {
+            this.pressingkeys.delete(e.key)
+            this.removeKeys.add(e.key)
+        })
+        document.body.addEventListener('keydown', (e) => {
+            this.pressingkeys.add(e.key)
+        })
+        await this.initChamp()
+        this.initialing = false
     }
 
     update() {
-        this.champManager.forEach(c => c.update())
+        if (this.removeKeys.has('ArrowRight') || this.removeKeys.has('ArrowLeft') || this.removeKeys.has('z')) {
+            this.champManager.call('stop') 
+            this.removeKeys.clear()
+        }
+        Object.entries(keyDefines).forEach(([key, values]) => {
+            if (this.pressingkeys.has(key)) {
+                let [action, ...rest] = values
+                action = String(action)
+                this.champManager.call(action, ...rest)
+            }
+        } )
+        this.champManager.call('update')
     }
 
     render() {
-        requestAnimationFrame(this.render.bind(this))
+        if (this.initialing) return
         const now = Date.now()
         if(now >= TPF + this.startTime) {
             this.startTime = now
@@ -47,10 +87,13 @@ class Game {
 
         // this.houseManager.forEach(obj => obj.render(this.c))
     
+        requestAnimationFrame(this.render.bind(this))
     }
 
     // handling methods
-
+    async initData() {
+        await getSprite('santa')
+    }
     initGameScreen() {
         const canvas = document.createElement('canvas')
        
@@ -65,6 +108,7 @@ class Game {
 
         this.c = canvas.getContext('2d')
         this.root.appendChild(canvas)
+        
     }
 
     initHouse() {
@@ -74,8 +118,8 @@ class Game {
         this.houseManager.push(house2)
     }
 
-    initChamp() {
-        const santa = new Santa(100, 100, 1)
+    async initChamp() {
+        const santa = new Santa(100, 200, 1)
         // const Santa2 = new Santa(100, 300, 1)
         this.champManager.push(santa)
         // this.champManager.push(Santa2)

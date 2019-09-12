@@ -6,7 +6,17 @@ const DEVICE = {
 const CHAMPION = {
     width: 50,
     height: 50,
-    max_speed: 5,
+    accelerate: 0.1,
+    max_speed: 3,
+    max_speedY: 3,
+    max_jump: 50
+}
+
+const CHILD_CANVAS = {
+    width: 119,
+    height: 100,
+    subW: 760, 
+    subH: 641
 }
 
 const FRAME = {
@@ -16,6 +26,7 @@ const FRAME = {
 export {
     DEVICE,
     CHAMPION,
-    FRAME
+    FRAME,
+    CHILD_CANVAS
 
 }

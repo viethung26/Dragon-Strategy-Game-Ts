@@ -2,6 +2,9 @@ import GameObject from 'framework/GameObject';
 import { DEVICE } from 'src/defines';
 
 export default class Map extends GameObject {
+    update(): void {
+        throw new Error("Method not implemented.");
+    }
     constructor() {
         super(0, 0, DEVICE.width, DEVICE.height)
     }

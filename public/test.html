@@ -28,9 +28,9 @@
         if (canvas) c = canvas.getContext("2d");
         function draw() {
             requestAnimationFrame(draw);
-            const now = new Date().getTime();
-                if (c && now >= startTime + fpsInterval) {
-                    startTime = now;
+            // const now = new Date().getTime();
+                // if (c && now >= startTime + fpsInterval) {
+                    // startTime = now;
                     c.fillStyle = "white";
                     c.fillRect(0, 0, 500, 500);
                     c.fillStyle = "blue";
@@ -51,7 +51,7 @@
 
                     x = x + 1;
                     if (x > 300) x = 0;
-                }
+                // }
         }
         // setInterval(draw, 20);
         draw();

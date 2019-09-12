@@ -26,8 +26,6 @@ class AnimationSets {
     play() {
         if (this.status && this.allStatus.includes(this.status)) {
             this.animation.play()
-            console.log('9779 ', this.animation)
-            console.log('9779 play')
         }
     }
     changeStatus(newStatus: string) {
@@ -39,9 +37,9 @@ class AnimationSets {
             this.play()
         }
     }
-    render(c2d: CanvasRenderingContext2D, x: number = 0, y: number = 0) {
+    render(c2d: CanvasRenderingContext2D, x: number = 0, y: number = 0, flip = false) {
         if(this.animation && this.animation.render) {
-            this.animation.render(c2d, x, y)
+            this.animation.render(c2d, x, y, flip)
         }
     }
 }

@@ -1,5 +1,8 @@
 import GameObject from 'framework/GameObject'
 export default class House extends GameObject {
+    update(): void {
+        throw new Error("Method not implemented.");
+    }
     isOpen: boolean
     index = 0
     animation: Array<string> = ['#000','#ff0', '#f0f', '#0ff', '#f00']
