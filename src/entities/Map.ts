@@ -25,7 +25,7 @@ export default class Map extends GameObject {
         throw new Error("Method not implemented.");
     }
     constructor() {
-        super(0, 0, DEVICE.width, DEVICE.height)
+        super(null, 0, 0, DEVICE.width, DEVICE.height)
         this.init()
         // console.log('9779 this.get ', this.bg)
     }
@@ -55,8 +55,9 @@ export default class Map extends GameObject {
         // c2d.drawImage(this.mapImg, 0, 0)
     }
     checkCollision(gameObject: GameObject): Rectangle {
-        MapArray.some((arr, i) => {
-            return arr.some((v, j) => {
+        MapArray.forEach((arr, i) => {
+            console.log('9779 aisdof')
+            return arr.forEach((v, j) => {
                 if(typeof v === 'number' && v !== 0) {
                     const y = i * SIZE + SIZE/2
                     const x = j * SIZE + SIZE/2

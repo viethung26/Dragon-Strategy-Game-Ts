@@ -3,6 +3,7 @@ import { CHAMPION, FRAME } from 'src/defines';
 import { getSprite } from 'framework/Sprites';
 import Animation from 'framework/Animation'
 import AnimationSets from 'framework/AnimationSets'
+import GameWorld from 'src/main';
 declare global {
     interface Window { 
         santa: any; 
@@ -20,13 +21,14 @@ export default class Champ extends GameObject {
     flip: boolean = false
     baseY = 0
     slideStart: number = null
+    isDroping: boolean = false
     private speed: number
     private accelerate: number
     private speedY: number
 
     lastTime: number
-    constructor(x: number, y: number, team: number, unit, color: string = '#fff', speed: number = 0, accelerate: number = 0, speedY: number = 0, accelerateY: number = 0) {
-        super(x, y, CHAMPION.width, CHAMPION.height)
+    constructor(gameWorld: GameWorld, x: number, y: number, team: number, unit, color: string = '#fff', speed: number = 0, accelerate: number = 0, speedY: number = 0, accelerateY: number = 0) {
+        super(gameWorld, x, y, CHAMPION.width, CHAMPION.height)
         this.baseY = y
         this.team = team
         this.unit = unit
@@ -51,14 +53,25 @@ export default class Champ extends GameObject {
         // console.log('9779 speed', this.speed, this.accelerate)
         this.x += this.speed
         this.y -= this.speedY
+        this.speed  += this.accelerate
+        if (this.status === 'Jump') this.speedY += CHAMPION.gravity
+         // Check speed over
+         if (this.speed > CHAMPION.max_speed) this.speed = CHAMPION.max_speed
+         else if (this.speed < - CHAMPION.max_speed) this.speed = - CHAMPION.max_speed
         //Check collision
         if (this.x > 1000) this.x = 0
-        if (this.y <= this.baseY - CHAMPION.max_jump) this.speedY = 0
-        else if (this.y > this.baseY) {
-            console.log('9779 end jump')
-            this.y = this.baseY 
+        const collisionObj = this.gameWorld.map.checkCollision(this)
+        if (collisionObj) {
+            console.log('9779 colls', collisionObj)
+            this.y = collisionObj.y + 1
             this.speedY = 0
         }
+        // if (this.y > this.baseY) {
+        //     console.log('9779 end jump')
+        //     // this.setStatus('Idle')
+        //     this.y = this.baseY 
+        //     this.speedY = 0
+        // }
         if (this.slideStart) {
             if (this.slideStart < Date.now() - slidingTime) {
                 this.slideStart = null
@@ -68,13 +81,8 @@ export default class Champ extends GameObject {
                 this.accelerate = (this.flip ? -1 : 1 ) * 2 * CHAMPION.accelerate
             }
         }
-        this.speed  += this.accelerate
-        if (this.status === 'Jump') this.speedY += CHAMPION.gravity
-        // Check speed over
-        if (this.speed > CHAMPION.max_speed) this.speed = CHAMPION.max_speed
-        else if (this.speed < - CHAMPION.max_speed) this.speed = - CHAMPION.max_speed
-        if (this.speedY > CHAMPION.max_speedY) this.speedY = CHAMPION.max_speedY
-        else if (this.speedY < - CHAMPION.max_speedY) this.speedY = - CHAMPION.max_speedY
+        // if (this.speedY > CHAMPION.max_speedY) this.speedY = CHAMPION.max_speedY
+        // else if (this.speedY < - CHAMPION.max_speedY) this.speedY = - CHAMPION.max_speedY
     }
 
     updateStatus() {
@@ -128,7 +136,7 @@ export default class Champ extends GameObject {
     public jump() {
         if (this.status !== 'Jump' && this.status !== 'Slide') {
             this.status= 'Jump'
-            this.speedY = 1
+            this.speedY = 6
         }
     }
     public slide() {

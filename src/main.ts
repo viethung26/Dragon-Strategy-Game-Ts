@@ -21,7 +21,7 @@ class ChampManager<Item> extends Array {
     }
 }
 
-class Game {
+class GameWorld {
     initialing = false
     startTime: number = 0
     root: HTMLElement = null
@@ -113,7 +113,7 @@ class Game {
     }
 
     async initChamp() {
-        const santa = new Santa(100, 200, 1)
+        const santa = new Santa(this, 100, 200, 1)
         // const Santa2 = new Santa(100, 300, 1)
         this.champManager.push(santa)
         // this.champManager.push(Santa2)
@@ -154,5 +154,6 @@ class Game {
         console.log(9779, 'end drag')
     }
 }
+export default GameWorld
 
-new Game('game')
+new GameWorld('game')

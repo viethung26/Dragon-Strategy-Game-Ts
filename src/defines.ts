@@ -7,10 +7,10 @@ const CHAMPION = {
     width: 50,
     height: 50,
     accelerate: 0.1,
-    gravity: -9.8,
-    max_speed: 3,
-    max_speedY: 3,
-    max_jump: 50
+    gravity: -0.3,
+    max_speed: 5,
+    // max_speedY: 15,
+    max_jump: 500
 }
 
 const CHILD_CANVAS = {

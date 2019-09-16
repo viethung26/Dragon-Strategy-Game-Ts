@@ -1,10 +1,13 @@
 import Rectangle from './Rectangle'
+import GameWorld from 'src/main'
 
 export default abstract class GameObject extends Rectangle {
+    gameWorld: GameWorld = null
     lastTime: number =  null
     order: number
-    constructor(x: number, y:number, w: number, h: number, order: number = 0) {
+    constructor(gameWorld: GameWorld, x: number, y:number, w: number, h: number, order: number = 0) {
         super(x,y,w,h)
+        this.gameWorld = gameWorld
         this.order = order
     }
     abstract update(): void
