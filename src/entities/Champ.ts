@@ -23,7 +23,6 @@ export default class Champ extends GameObject {
     private speed: number
     private accelerate: number
     private speedY: number
-    private accelerateY: number
 
     lastTime: number
     constructor(x: number, y: number, team: number, unit, color: string = '#fff', speed: number = 0, accelerate: number = 0, speedY: number = 0, accelerateY: number = 0) {
@@ -36,7 +35,6 @@ export default class Champ extends GameObject {
         this.speedY = speedY
         this.accelerate = accelerate
         this.speedY = speedY
-        this.accelerateY = accelerateY
         this.status = "Idle"
         this.init()
         this.lastTime = new Date().getTime()
@@ -55,11 +53,10 @@ export default class Champ extends GameObject {
         this.y -= this.speedY
         //Check collision
         if (this.x > 1000) this.x = 0
-        if (this.y <= this.baseY - CHAMPION.max_jump) this.accelerateY = - 0.2
+        if (this.y <= this.baseY - CHAMPION.max_jump) this.speedY = 0
         else if (this.y > this.baseY) {
             console.log('9779 end jump')
             this.y = this.baseY 
-            this.accelerateY = 0
             this.speedY = 0
         }
         if (this.slideStart) {
@@ -72,7 +69,7 @@ export default class Champ extends GameObject {
             }
         }
         this.speed  += this.accelerate
-        this.speedY += this.accelerateY
+        if (this.status === 'Jump') this.speedY += CHAMPION.gravity
         // Check speed over
         if (this.speed > CHAMPION.max_speed) this.speed = CHAMPION.max_speed
         else if (this.speed < - CHAMPION.max_speed) this.speed = - CHAMPION.max_speed
@@ -129,15 +126,14 @@ export default class Champ extends GameObject {
     }
 
     public jump() {
-        if (this.status !== 'Jump') {
-            console.log('9779 jump')
+        if (this.status !== 'Jump' && this.status !== 'Slide') {
+            this.status= 'Jump'
             this.speedY = 1
-            this.accelerateY = 0.2
         }
     }
     public slide() {
         if (this.status !== 'Jump' && !this.slideStart) {
-            // this.status = 'Slide'
+            this.status= 'Slide'
             this.slideStart = Date.now()
         }
     }

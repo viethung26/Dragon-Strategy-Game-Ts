@@ -1,30 +1,21 @@
-export default abstract class GameObject {
+import Rectangle from './Rectangle'
+
+export default abstract class GameObject extends Rectangle {
     lastTime: number =  null
-    x: number
-    y: number
-    w: number
-    h: number
     order: number
     constructor(x: number, y:number, w: number, h: number, order: number = 0) {
-        this.x = x
-        this.y = y
-        this.w = w
-        this.h = h
+        super(x,y,w,h)
         this.order = order
     }
     abstract update(): void
-    abstract render(c2d: CanvasRenderingContext2D): void
+    abstract render(c2d: CanvasRenderingContext2D): void 
     abstract handleClick(): void
 
 
-    isIntesect(x: number, y: number) {
-        if (this.x - this.w/2 <= x && this.x + this.w/2 >= x && this.y - this.h/2 <= y && this.y + this.h/2 >= y )
-            return true
-        return false
+    public collisionWith(obj: Rectangle) {
+        return this.intersectWith(obj)
     }
-
-    setPos(x, y) {
-        this.x = x 
-        this.y = y
+    public setPos(x: number,y: number) {
+        this.setPoint(x, y)
     }
 }

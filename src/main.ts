@@ -1,11 +1,10 @@
-import House from 'entities/House'
 import GameObject from 'framework/GameObject'
 import { DEVICE, FRAME } from './defines'
 import CanvasDragTs from 'framework/CanvasDragTs';
 import Champ from 'entities/Champ';
 import Santa from 'units/Santa';
 import Map from 'entities/Map';
-import { getSprite } from 'framework/Sprites';
+import { getSprite, initData } from 'framework/Sprites';
 //time per frame
 const TPF = Math.floor(1000/FRAME.fps)
 const keyDefines = {
@@ -28,7 +27,6 @@ class Game {
     root: HTMLElement = null
     c: CanvasRenderingContext2D = null
     champManager: ChampManager<Champ> = new ChampManager
-    houseManager: House[] = []
     dragObject: { object: GameObject, dx: number, dy: number } = {object: null, dx: 0, dy: 0}
     map: Map = null
     pressingkeys = new Set()
@@ -44,7 +42,8 @@ class Game {
 
     async init() {
         this.initialing = true
-        await this.initData()
+
+        await initData()
         if(this.root) this.initGameScreen()
         //key
         document.body.addEventListener('keyup', (e) => {
@@ -54,6 +53,7 @@ class Game {
         document.body.addEventListener('keydown', (e) => {
             this.pressingkeys.add(e.key)
         })
+        this.initMap()
         await this.initChamp()
         this.initialing = false
     }
@@ -77,13 +77,13 @@ class Game {
         if (this.initialing) return
         const now = Date.now()
         if(now >= TPF + this.startTime) {
+            this.map.render(this.c)
             this.startTime = now
             this.update()
-            this.c.fillStyle = '#fff'
-            this.c.fillRect(0,0, DEVICE.width, DEVICE.height)
+            // this.c.fillStyle = '#fff'
+            // this.c.fillRect(0,0, DEVICE.width, DEVICE.height)
             this.champManager.forEach(obj => obj.render(this.c))
         }
-        // this.map.render(this.c)
 
         // this.houseManager.forEach(obj => obj.render(this.c))
     
@@ -91,9 +91,6 @@ class Game {
     }
 
     // handling methods
-    async initData() {
-        await getSprite('santa')
-    }
     initGameScreen() {
         const canvas = document.createElement('canvas')
        
@@ -111,11 +108,8 @@ class Game {
         
     }
 
-    initHouse() {
-        const house = new House(20, 20, 40, 40)
-        const house2 = new House(500, 100, 40, 40)
-        this.houseManager.push(house)
-        this.houseManager.push(house2)
+    initMap() {
+        this.map = new Map()
     }
 
     async initChamp() {
@@ -128,23 +122,23 @@ class Game {
     handleClickOnScreen = e => {
         const {offsetX: x, offsetY: y} = e
         console.log(9779, 'mouse click')
-        this.houseManager.forEach(h => {
-            if (h.isIntesect(x, y)) h.handleClick()
-        })
+        // this.houseManager.forEach(h => {
+        //     if (h.isIntesect(x, y)) h.handleClick()
+        // })
     }
 
     // 3 methods handle when drag object for CanvasDragTs Module
     isDragable(x: number, y: number) {
         return new Promise((resolve) => {
-            this.houseManager.forEach(h => {
-                if (h.isIntesect(x, y)) {
-                    this.dragObject.object = h
-                    this.dragObject.dx = x - h.x
-                    this.dragObject.dy = y - h.y 
-                    console.log(9779, 'start dragging')
-                    resolve(true)
-                }
-            })
+            // this.houseManager.forEach(h => {
+            //     if (h.isIntesect(x, y)) {
+            //         this.dragObject.object = h
+            //         this.dragObject.dx = x - h.x
+            //         this.dragObject.dy = y - h.y 
+            //         console.log(9779, 'start dragging')
+            //         resolve(true)
+            //     }
+            // })
             resolve(false)
         })
     }
