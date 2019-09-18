@@ -4,6 +4,7 @@ import { getSprite } from 'framework/Sprites';
 import Animation from 'framework/Animation'
 import AnimationSets from 'framework/AnimationSets'
 import GameWorld from 'src/main';
+import Rectangle from 'framework/Rectangle';
 declare global {
     interface Window { 
         santa: any; 
@@ -49,6 +50,14 @@ export default class Champ extends GameObject {
         window.santa = this.animationSets
     }
 
+    handleAfterCollision(boundingObj: Rectangle) {
+        const {x, y, w, h} = boundingObj
+        if (this.y < y) {
+            this.speedY = 0
+            this.y = (y - h/2 - this.h/2)         
+        }
+    }
+
     updatePosition() {
         // console.log('9779 speed', this.speed, this.accelerate)
         this.x += this.speed
@@ -61,24 +70,15 @@ export default class Champ extends GameObject {
         //Check collision
         if (this.x > 1000) this.x = 0
         const collisionObj = this.gameWorld.map.checkCollision(this)
-        if (collisionObj) {
-            console.log('9779 colls', collisionObj)
-            this.y = collisionObj.y + 1
-            this.speedY = 0
-        }
-        // if (this.y > this.baseY) {
-        //     console.log('9779 end jump')
-        //     // this.setStatus('Idle')
-        //     this.y = this.baseY 
-        //     this.speedY = 0
-        // }
+        if (collisionObj) this.handleAfterCollision(collisionObj)
+        
         if (this.slideStart) {
             if (this.slideStart < Date.now() - slidingTime) {
                 this.slideStart = null
                 this.accelerate = 0
                 this.speed = 0
             } else {
-                this.accelerate = (this.flip ? -1 : 1 ) * 2 * CHAMPION.accelerate
+                this.accelerate = (this.flip ? -1 : 1 ) * 2 * this.accelerate
             }
         }
         // if (this.speedY > CHAMPION.max_speedY) this.speedY = CHAMPION.max_speedY

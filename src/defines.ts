@@ -4,8 +4,8 @@ const DEVICE = {
 }
 
 const CHAMPION = {
-    width: 50,
-    height: 50,
+    width: 119,
+    height: 70,
     accelerate: 0.1,
     gravity: -0.3,
     max_speed: 5,
@@ -17,7 +17,7 @@ const CHILD_CANVAS = {
     width: 119,
     height: 100,
     subW: 760, 
-    subH: 641
+    subH: 570
 }
 
 const FRAME = {

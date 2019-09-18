@@ -3,8 +3,10 @@ import Point from './Point'
 class Rectangle extends Point {
     w: number 
     h: number 
+    dx:number = 0.5
+    dy:number = 1
     static isPointInRect(point: Point, rect: Rectangle): boolean {
-        if (point.x <= rect.x + rect.w/2 && point.x >= rect.x - rect.w/2 
+        if (point.x <= rect.x + rect.w && point.x >= rect.x - rect.w/2 
             && point.y <= rect.y + rect.h/2 && point.y >= rect.y - rect.h/2 ) {
                 return true
         }
@@ -16,10 +18,9 @@ class Rectangle extends Point {
         pointsA.push(new Point(rectA.x + rectA.w/2, rectA.y - rectA.h/2))
         pointsA.push(new Point(rectA.x - rectA.w/2, rectA.y + rectA.h/2))
         pointsA.push(new Point(rectA.x + rectA.w/2, rectA.y + rectA.h/2))
-        pointsA.some((point: Point) => {
+        return pointsA.some((point: Point) => {
             return rectB.hasPoint(point)
         })
-        return false
     }
     constructor(x: number, y: number, w: number, h:number) {
         super(x ,y)

@@ -55,9 +55,21 @@ export default class Map extends GameObject {
         // c2d.drawImage(this.mapImg, 0, 0)
     }
     checkCollision(gameObject: GameObject): Rectangle {
-        MapArray.forEach((arr, i) => {
-            console.log('9779 aisdof')
-            return arr.forEach((v, j) => {
+        
+        const {x, y, w, h} = gameObject
+        let minX = Math.floor((x-w/2)/SIZE) 
+        let minY = Math.floor((y-h/2)/SIZE) 
+        let maxX = Math.ceil((x+w/2)/SIZE) 
+        let maxY = Math.ceil((y+h/2)/SIZE) 
+        if (minX < 0) minX = 0
+        if (minY < 0) minY = 0
+        if (maxX >= MapArray[0].length) maxX = MapArray[0].length - 1
+        if (maxY >= MapArray.length) maxY = MapArray.length - 1
+        // console.log(minX, minY, maxX, maxY);
+
+        for(let i = minY; i<= maxY; i++) {
+            for(let j = minX; j<= maxX; j++) {
+                const v = MapArray[i][j]
                 if(typeof v === 'number' && v !== 0) {
                     const y = i * SIZE + SIZE/2
                     const x = j * SIZE + SIZE/2
@@ -66,8 +78,8 @@ export default class Map extends GameObject {
                         return rect
                     }
                 }
-            })
-        })
+            }
+        }
         return null
     }
     handleClick(): void {

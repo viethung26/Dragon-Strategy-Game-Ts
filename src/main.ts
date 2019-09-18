@@ -5,6 +5,17 @@ import Champ from 'entities/Champ';
 import Santa from 'units/Santa';
 import Map from 'entities/Map';
 import { getSprite, initData } from 'framework/Sprites';
+import Rectangle from 'framework/Rectangle';
+import Point from 'framework/Point';
+
+let MODE = 'ok'
+
+
+const testFunc = () => {
+    const a = new Rectangle(20, 20, 20, 20)
+    const b = new Rectangle(20, 20, 20,20)
+    console.log('9779 ', Rectangle.isIntersection(a, b))
+}
 //time per frame
 const TPF = Math.floor(1000/FRAME.fps)
 const keyDefines = {
@@ -33,12 +44,17 @@ class GameWorld {
     removeKeys = new Set()
 
     constructor(id: string) {
+        if (MODE == 'test') {
+            testFunc()
+            return
+        }
         this.root = document.getElementById(id)
         ;(async() => {
             await this.init()
             this.render()
         })()
     }
+
 
     async init() {
         this.initialing = true
@@ -114,6 +130,9 @@ class GameWorld {
 
     async initChamp() {
         const santa = new Santa(this, 100, 200, 1)
+        // const santa2 = new Santa(this, 100, 200, 1)
+        // console.log('9779 check', santa.collisionWith(santa2))
+        
         // const Santa2 = new Santa(100, 300, 1)
         this.champManager.push(santa)
         // this.champManager.push(Santa2)
