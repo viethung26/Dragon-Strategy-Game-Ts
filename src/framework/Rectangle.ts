@@ -3,10 +3,8 @@ import Point from './Point'
 class Rectangle extends Point {
     w: number 
     h: number 
-    dx:number = 0.5
-    dy:number = 1
     static isPointInRect(point: Point, rect: Rectangle): boolean {
-        if (point.x <= rect.x + rect.w && point.x >= rect.x - rect.w/2 
+        if (point.x <= rect.x + rect.w/2 && point.x >= rect.x - rect.w/2 
             && point.y <= rect.y + rect.h/2 && point.y >= rect.y - rect.h/2 ) {
                 return true
         }
@@ -31,15 +29,18 @@ class Rectangle extends Point {
     protected setBoundingRect(x: number, y: number, w: number, h: number) {
 
     }
-    protected getBoundingRect(x: number, y: number, w: number, h: number) {
-        return this
+    protected getBoundingRect() {
+        const {x, y, w, h} = this
+        return {x,y,w,h}
     }
     
     protected hasPoint(point: Point): boolean {
         return Rectangle.isPointInRect(point, this)
     }
     protected intersectWith(rect: Rectangle) {
-        return Rectangle.isIntersection(rect, this)
+        const equal =  Rectangle.isIntersection(rect, this)
+        if (equal) console.log('9779 ', this.x, rect.x)
+        return equal
     }
 }
 export default Rectangle

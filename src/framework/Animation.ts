@@ -1,4 +1,4 @@
-import { FRAME, CHILD_CANVAS } from 'src/defines';
+import { FRAME, CHILD_CANVAS, CHAMPION } from 'src/defines';
 
 export default class Animation {
     name: string 
@@ -58,15 +58,15 @@ export default class Animation {
         newCanvas.height = CHILD_CANVAS.height
         const c = newCanvas.getContext('2d')
         c.fillStyle = 'red'
-        c.strokeRect(0, 0, newCanvas.width, newCanvas.height)
+        c.strokeRect(0, 0, CHAMPION.width, CHAMPION.height)
         if (flip) {
             c.translate(CHILD_CANVAS.width, 0);
             c.scale(-1, 1);
         }
         if (this.type === 'ImageData') {
             c.putImageData(this.frames[this.currentFrame], 0, 0)
-        } else c.drawImage(this.frames[this.currentFrame], 0, 0, CHILD_CANVAS.subW, CHILD_CANVAS.subH, 0, 0, CHILD_CANVAS.width, CHILD_CANVAS.height)
-        c.fillRect(newCanvas.width/2-4,newCanvas.height/2-4, 8,8)
+        } else c.drawImage(this.frames[this.currentFrame], 120, 20, CHILD_CANVAS.subW, CHILD_CANVAS.subH, 0, 0, CHILD_CANVAS.width, CHILD_CANVAS.height)
+        c.fillRect(CHAMPION.width/2-4,CHAMPION.height/2-4, 8,8)
         c2d.drawImage(newCanvas,x,y)
     }
 }

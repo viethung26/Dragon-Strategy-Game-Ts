@@ -10,7 +10,7 @@ const MapArray = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -41,9 +41,11 @@ export default class Map extends GameObject {
         MapArray.forEach((arr, i) => {
             arr.forEach((v, j) => {
                 if(typeof v === 'number' && v !== 0) {
-                    const y = i * SIZE 
+                    const y = i * SIZE
                     const x = j * SIZE
-                    c2d.drawImage(this.tiles[v-1], x, y, SIZE, SIZE)
+                    const offset = SIZE/2
+                    c2d.drawImage(this.tiles[v-1], x - offset, y - offset, SIZE, SIZE)
+                    c2d.fillRect(x - 2, y - 2, 4, 4)
                 }
             })
         })
@@ -71,10 +73,11 @@ export default class Map extends GameObject {
             for(let j = minX; j<= maxX; j++) {
                 const v = MapArray[i][j]
                 if(typeof v === 'number' && v !== 0) {
-                    const y = i * SIZE + SIZE/2
-                    const x = j * SIZE + SIZE/2
+                    const y = i * SIZE
+                    const x = j * SIZE
                     const rect = new Rectangle(x, y, SIZE, SIZE)
                     if (gameObject.collisionWith(rect)) {
+                        console.log('9779 ', i, j)
                         return rect
                     }
                 }

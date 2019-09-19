@@ -42,6 +42,7 @@ class GameWorld {
     map: Map = null
     pressingkeys = new Set()
     removeKeys = new Set()
+    gameStatus
 
     constructor(id: string) {
         if (MODE == 'test') {
@@ -103,7 +104,8 @@ class GameWorld {
 
         // this.houseManager.forEach(obj => obj.render(this.c))
     
-        requestAnimationFrame(this.render.bind(this))
+        const gameId = requestAnimationFrame(this.render.bind(this))
+        if (this.gameStatus === 'pause') cancelAnimationFrame(gameId)
     }
 
     // handling methods
@@ -136,6 +138,14 @@ class GameWorld {
         // const Santa2 = new Santa(100, 300, 1)
         this.champManager.push(santa)
         // this.champManager.push(Santa2)
+    }
+
+    pause() {
+        this.gameStatus = 'pause'
+    }
+    play() {
+        this.gameStatus = 'play'
+        // this.render()
     }
 
     handleClickOnScreen = e => {

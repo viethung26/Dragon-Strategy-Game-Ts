@@ -10,7 +10,7 @@ declare global {
         santa: any; 
     }
 }
-
+const offset = {x: CHAMPION.width/2, y: CHAMPION.height/2}
 const slidingTime = 600
 export default class Champ extends GameObject {
     animationSets: AnimationSets
@@ -39,6 +39,7 @@ export default class Champ extends GameObject {
         this.accelerate = accelerate
         this.speedY = speedY
         this.status = "Idle"
+        this.isDroping = true
         this.init()
         this.lastTime = new Date().getTime()
     }
@@ -51,11 +52,15 @@ export default class Champ extends GameObject {
     }
 
     handleAfterCollision(boundingObj: Rectangle) {
+
+        console.log('9779 ', boundingObj, this.getBoundingRect())
         const {x, y, w, h} = boundingObj
-        if (this.y < y) {
+        // if (this.y < y) {
+            this.gameWorld.pause()
+            this.isDroping = false
             this.speedY = 0
-            this.y = (y - h/2 - this.h/2)         
-        }
+            this.y = y - w/2 - this.h/2
+        // }
     }
 
     updatePosition() {
@@ -63,7 +68,7 @@ export default class Champ extends GameObject {
         this.x += this.speed
         this.y -= this.speedY
         this.speed  += this.accelerate
-        if (this.status === 'Jump') this.speedY += CHAMPION.gravity
+        if (this.status === 'Jump' || this.isDroping) this.speedY += CHAMPION.gravity
          // Check speed over
          if (this.speed > CHAMPION.max_speed) this.speed = CHAMPION.max_speed
          else if (this.speed < - CHAMPION.max_speed) this.speed = - CHAMPION.max_speed
@@ -108,7 +113,7 @@ export default class Champ extends GameObject {
                 // console.log('9779 status', this.status)
                 this.animationSets.changeStatus(this.status)
             }
-            this.animationSets.render(c2d, this.x, this.y, this.flip)
+            this.animationSets.render(c2d, this.x - offset.x, this.y - offset.y, this.flip)
         }
     }    
     
