@@ -14,8 +14,8 @@ const MapArray = [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    [1,2,2,2,2,2,2,3,17,2,17,1,2,2,2,3],
-    [4,5,5,5,5,5,5,6,18,5,18,4,5,5,5,6],
+    [1,2,2,2,2,2,2,17,17,2,17,17,2,2,2,3],
+    [4,5,5,5,5,5,5,18,18,5,18,18,5,5,5,6],
 ]
 export default class Map extends GameObject {
     bg = null
@@ -56,9 +56,9 @@ export default class Map extends GameObject {
         // c2d.putImageData(newC2d.getImageData(0,0,50,50), 0 ,0)
         // c2d.drawImage(this.mapImg, 0, 0)
     }
-    checkCollision(gameObject: GameObject): Rectangle {
+    checkCollision(rectObject: Rectangle): Rectangle {
         
-        const {x, y, w, h} = gameObject
+        const {x, y, w, h} = rectObject
         let minX = Math.floor((x-w/2)/SIZE) 
         let minY = Math.floor((y-h/2)/SIZE) 
         let maxX = Math.ceil((x+w/2)/SIZE) 
@@ -72,11 +72,12 @@ export default class Map extends GameObject {
         for(let i = minY; i<= maxY; i++) {
             for(let j = minX; j<= maxX; j++) {
                 const v = MapArray[i][j]
-                if(typeof v === 'number' && v !== 0) {
+                if(typeof v === 'number' && v !== 0 && v !== 17 && v!== 18) {
                     const y = i * SIZE
                     const x = j * SIZE
                     const rect = new Rectangle(x, y, SIZE, SIZE)
-                    if (gameObject.collisionWith(rect)) {
+                    // if (rect.in)
+                    if (Rectangle.isIntersection(rectObject, rect)) {
                         console.log('9779 ', i, j)
                         return rect
                     }

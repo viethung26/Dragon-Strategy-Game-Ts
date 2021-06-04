@@ -53,20 +53,24 @@ export default class Animation {
 
     render(c2d: CanvasRenderingContext2D, x: number = 0, y: number = 0, flip: boolean = false) {
         this.update()
+        c2d.fillStyle = 'red'
+        c2d.strokeRect(x, y, CHAMPION.width, CHAMPION.height)
         const newCanvas = document.createElement('canvas')
         newCanvas.width = CHILD_CANVAS.width
         newCanvas.height = CHILD_CANVAS.height
         const c = newCanvas.getContext('2d')
-        c.fillStyle = 'red'
-        c.strokeRect(0, 0, CHAMPION.width, CHAMPION.height)
+        // c.fillStyle = 'red'
+        // c.strokeRect(0, 0, CHAMPION.width, CHAMPION.height)
         if (flip) {
             c.translate(CHILD_CANVAS.width, 0);
             c.scale(-1, 1);
         }
+        // c.translate(-(CHILD_CANVAS.width - CHAMPION.width)/2, 0)
         if (this.type === 'ImageData') {
-            c.putImageData(this.frames[this.currentFrame], 0, 0)
-        } else c.drawImage(this.frames[this.currentFrame], 120, 20, CHILD_CANVAS.subW, CHILD_CANVAS.subH, 0, 0, CHILD_CANVAS.width, CHILD_CANVAS.height)
-        c.fillRect(CHAMPION.width/2-4,CHAMPION.height/2-4, 8,8)
-        c2d.drawImage(newCanvas,x,y)
+            // c.putImageData(this.frames[this.currentFrame], 0, 0)
+        } else c.drawImage(this.frames[this.currentFrame], CHILD_CANVAS.subW.from, 20, CHILD_CANVAS.subW.to, CHILD_CANVAS.subH, 0, 0, CHILD_CANVAS.width, CHILD_CANVAS.height)
+        c2d.drawImage(newCanvas,x-CHILD_CANVAS.offset.x,y,CHILD_CANVAS.width, CHILD_CANVAS.height)
+        c2d.fillRect(x + CHAMPION.width/2-4, y + CHAMPION.height/2-4, 8,8)
+
     }
 }

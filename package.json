@@ -10,7 +10,7 @@
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
     "build": "webpack --watch",
-    "start": "sudo ./node_modules/.bin/webpack-dev-server --open chrome"
+    "start": "./node_modules/.bin/webpack-dev-server --open"
   },
   "author": "",
   "license": "ISC",

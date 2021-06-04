@@ -5,6 +5,7 @@ import Animation from 'framework/Animation'
 import AnimationSets from 'framework/AnimationSets'
 import GameWorld from 'src/main';
 import Rectangle from 'framework/Rectangle';
+import Point from 'framework/Point';
 declare global {
     interface Window { 
         santa: any; 
@@ -55,27 +56,31 @@ export default class Champ extends GameObject {
 
         console.log('9779 ', boundingObj, this.getBoundingRect())
         const {x, y, w, h} = boundingObj
-        // if (this.y < y) {
-            this.gameWorld.pause()
+        if (this.y < y) {
+            // this.gameWorld.pause()
             this.isDroping = false
             this.speedY = 0
             this.y = y - w/2 - this.h/2
-        // }
+        }
     }
 
     updatePosition() {
         // console.log('9779 speed', this.speed, this.accelerate)
+        const nextRect = new Rectangle(this.x + this.speed, this.y - this.speedY, this.w, this.h)
+        this.speed  += this.accelerate
+        this.speedY += CHAMPION.gravity
+        const collisionObj = this.gameWorld.map.checkCollision(nextRect)
+        if (collisionObj) this.handleAfterCollision(collisionObj)
         this.x += this.speed
         this.y -= this.speedY
-        this.speed  += this.accelerate
-        if (this.status === 'Jump' || this.isDroping) this.speedY += CHAMPION.gravity
          // Check speed over
          if (this.speed > CHAMPION.max_speed) this.speed = CHAMPION.max_speed
          else if (this.speed < - CHAMPION.max_speed) this.speed = - CHAMPION.max_speed
         //Check collision
         if (this.x > 1000) this.x = 0
-        const collisionObj = this.gameWorld.map.checkCollision(this)
-        if (collisionObj) this.handleAfterCollision(collisionObj)
+        if (this.x < 0) this.x = 1000
+        if (this.y > 800) this.y = 0
+        
         
         if (this.slideStart) {
             if (this.slideStart < Date.now() - slidingTime) {
@@ -130,6 +135,7 @@ export default class Champ extends GameObject {
     }
 
     public setStatus(status) {
+        console.log('9779 STATUS', status)
         if (status !== this.status) this.status = status
     }
 
